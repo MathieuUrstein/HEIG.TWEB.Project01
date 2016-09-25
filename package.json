@@ -1,5 +1,5 @@
 {
-  "name": "heig.tweb.projet01",
+  "name": "heig-tweb-projet01",
   "version": "0.0.1",
   "description": "A sample Node.js app using Express 4 for TWEB",
   "engines": {
