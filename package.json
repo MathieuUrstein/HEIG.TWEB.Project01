@@ -1,0 +1,25 @@
+{
+  "name": "heig.tweb.projet01",
+  "version": "0.0.1",
+  "description": "A sample Node.js app using Express 4 for TWEB",
+  "engines": {
+    "node": "5.9.1"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "4.13.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MojoMateo/HEIG.TWEB.Projet01"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT"
+}
