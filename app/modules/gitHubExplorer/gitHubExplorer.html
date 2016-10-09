@@ -8,6 +8,40 @@
 				<div class="intro-message">
 					<h1>{{title}}</h1>
 					<h3>{{subtitle}}</h3>
+
+                    <div class="row choices">
+                        <div class="col-lg-3">
+                            <div class="btn btn-warning btn-lg btn-block" ng-click="setAngularJs()">Angular.js</div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="btn btn-warning btn-lg btn-block" ng-click="setAngular2()">Angular 2</div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="btn btn-warning btn-lg btn-block" ng-click="setReact()">React</div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="btn btn-warning btn-lg btn-block" ng-click="setEmber()">Ember</div>
+                        </div>
+                    </div>
+
+                    <form class="form-horizontal">
+                        <div class="form-group form-group-lg">
+                            <div class="row inputChoices">
+                                <div class="col-lg-4">
+                                    <input class="form-control" type="text" placeholder="User" ng-model="user">
+                                </div>
+                                <div class="col-lg-1 slash">
+                                    /
+                                </div>
+                                <div class=" col-lg-4">
+                                    <input class="form-control" type="text" placeholder="Repository" ng-model="userRepo">
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="btn btn-info btn-lg btn-block" ng-click="fetchAPI()">Visualiser</div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
 				</div>
 			</div>
 		</div>

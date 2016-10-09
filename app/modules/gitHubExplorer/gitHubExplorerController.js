@@ -1,24 +1,54 @@
 (function () {
-
-	angular
+    angular
 		.module('gitHubExplorer')
 		.controller('gitHubExplorerController', Home);
 
-	function Home($scope, $http, $q) {
+	function Home($q, $scope, $http) {
 
 		$scope.title = "GitHubExplorer";
         $scope.subtitle = "Some statistics on github as graphics";
+        $scope.user = 'angular';
+        $scope.userRepo = 'angular.js';
+        $scope.fetchAPI = function(){fetchAPI($q, $scope, $http)};
+        $scope.setAngularJs = function(){setAngularJs($scope)};
+        $scope.setAngular2 = function(){setAngular2($scope)};
+        $scope.setReact = function(){setReact($scope)};
+        $scope.setEmber = function(){setEmber($scope)};
 
-        fetchAPI($q, $scope, $http, 'angular', 'angular.js');
+        fetchAPI($q, $scope, $http);
 	}
 
-    function fetchAPI($q, $scope, $http, user, userRepo) {
+	function setAngularJs($scope) {
+        $scope.user = 'angular';
+        $scope.userRepo = 'angular.js';
+        $scope.fetchAPI();
+    }
+
+    function setAngular2($scope) {
+        $scope.user = 'angular';
+        $scope.userRepo = 'angular';
+        $scope.fetchAPI();
+    }
+
+    function setReact($scope) {
+        $scope.user = 'facebook';
+        $scope.userRepo = 'react';
+        $scope.fetchAPI();
+    }
+
+    function setEmber($scope) {
+        $scope.user = 'emberjs';
+        $scope.userRepo = 'ember.js';
+        $scope.fetchAPI();
+    }
+
+    function fetchAPI($q, $scope, $http) {
 
         var token = '4ff527905e6cea7a2dafe27f9f784695eea0d44b';
         var url = 'https://api.github.com';
         var repos = '/repos';
-        var owner = '/'+user;
-        var repo = '/'+userRepo;
+        var owner = '/'+$scope.user;
+        var repo = '/'+$scope.userRepo;
         var apiUrlCombined = url+repos+owner+repo;
 
         // get the contributors list
@@ -36,7 +66,7 @@
             headers: {'Authorization': 'token '+token}
         });
 
-        // execute tous les appelles et attend toutes les réponses avant de passer au callback
+        // execute tous les appels et attend toutes les réponses avant de passer au callback
         $q.all([
             promiseContributors,
             promiseActivity,
@@ -46,11 +76,6 @@
             $scope.contributors = ret[0].data;
             $scope.commit_activity = ret[1].data;
             $scope.punch_card = ret[2].data;
-
-            console.log($scope.contributors);
-            console.log($scope.commit_activity);
-            console.log($scope.punch_card);
-
             prepareForCharts($scope);
         });
     }
@@ -132,8 +157,8 @@
         }
 
         for (key in $scope.punch_card) {
-            $scope.charts.punch_card.days.data[$scope.punch_card[key][0]] = $scope.punch_card[key][2];
-            $scope.charts.punch_card.hours.data[$scope.punch_card[key][1]] = $scope.punch_card[key][2];
+            $scope.charts.punch_card.days.data[$scope.punch_card[key][0]] += $scope.punch_card[key][2];
+            $scope.charts.punch_card.hours.data[$scope.punch_card[key][1]] += $scope.punch_card[key][2];
         }
     }
 })();
