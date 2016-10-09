@@ -28,6 +28,5 @@
 
         // if no routes found
         $urlRouterProvider.otherwise('/');
-
     });
 })();

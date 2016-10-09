@@ -25,17 +25,59 @@
 
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-5 col-sm-6">
+			<div class="col-lg-12">
 				<hr class="section-heading-spacer">
 				<div class="clearfix"></div>
-				<h2 class="section-heading">{{chartTitle}}</h2>
-				<p class="lead">{{chartSubtitle}}</p>
-			</div>
-			<div class="col-lg-5 col-lg-offset-2 col-sm-6">
-				<canvas id="doughnut" class="chart chart-doughnut" chart-data="data" chart-labels="labels"></canvas>
+				<h2 class="section-heading">Top contributeurs</h2>
+                <div class="row">
+                    <p class="text-center">Nombre de commits par contributeurs</p>
+                    <canvas class="chart chart-bar"
+                            chart-data="charts.contributors.data"
+                            chart-labels="charts.contributors.labels">
+                    </canvas>
+                </div>
+				<div class="row">
+                    <div class="col-xs-2 contributorsProfile" ng-repeat="contributor in contributors">
+                        <a href="{{contributor.author.html_url}}">
+                            <p>{{contributor.author.login}} ({{contributor.total}})</p>
+                            <img src="{{contributor.author.avatar_url}}">
+                        </a>
+                    </div>
+                </div>
 			</div>
 		</div>
-
+        <div class="row">
+            <div class="col-lg-12">
+                <hr class="section-heading-spacer">
+                <div class="clearfix"></div>
+                <h2 class="section-heading">Activités</h2>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p class="text-center">Nombre de commits par semaines</p>
+                        <canvas class="chart chart-bar"
+                                chart-data="charts.commit_activity.data"
+                                chart-labels="charts.commit_activity.labels">
+                        </canvas>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 40px">
+                    <div class="col-xs-6">
+                        <p class="text-center">Activités par jours de la semaine</p>
+                        <canvas class="chart chart-polar-area"
+                                chart-data="charts.punch_card.days.data"
+                                chart-labels="charts.punch_card.days.labels">
+                        </canvas>
+                    </div>
+                    <div class="col-xs-6">
+                        <p class="text-center">Activités par heures de la journée</p>
+                        <canvas class="chart chart-polar-area"
+                                chart-data="charts.punch_card.hours.data"
+                                chart-labels="charts.punch_card.hours.labels">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</div>
 	<!-- /.container -->
 
