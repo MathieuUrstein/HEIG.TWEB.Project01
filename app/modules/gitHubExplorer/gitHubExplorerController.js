@@ -50,21 +50,18 @@
         var owner = '/'+$scope.user;
         var repo = '/'+$scope.userRepo;
         var apiUrlCombined = url+repos+owner+repo;
+	var options = {
+            headers: {'Authorization': 'token '+token}
+        };
 
         // get the contributors list
-        var promiseContributors = $http.get(apiUrlCombined + '/stats/contributors', {
-            headers: {'Authorization': 'token '+token}
-        });
+        var promiseContributors = $http.get(apiUrlCombined + '/stats/contributors', options);
 
         // get the last year commit activity
-        var promiseActivity = $http.get(apiUrlCombined + '/stats/commit_activity', {
-            headers: {'Authorization': 'token '+token}
-        });
+        var promiseActivity = $http.get(apiUrlCombined + '/stats/commit_activity', options);
 
         // get the punch_card
-        var promisePunch = $http.get(apiUrlCombined + '/stats/punch_card', {
-            headers: {'Authorization': 'token '+token}
-        });
+        var promisePunch = $http.get(apiUrlCombined + '/stats/punch_card', options);
 
         // execute tous les appels et attend toutes les réponses avant de passer au callback
         $q.all([
