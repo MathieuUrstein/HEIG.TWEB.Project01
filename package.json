@@ -1,5 +1,5 @@
 {
-  "name": "heig-tweb-projet01",
+  "name": "heig-tweb-Project01",
   "version": "0.0.1",
   "description": "A sample Node.js app using Express 4 for TWEB",
   "engines": {
@@ -9,6 +9,16 @@
   "scripts": {
     "start": "node index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mathieuurstein/HEIG.TWEB.Project01"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT",
   "dependencies": {
     "angular": "1.5.8",
     "angular-animate": "1.5.8",
@@ -17,16 +27,14 @@
     "angular-ui-router": "0.3.1",
     "bootstrap": "3.3.7",
     "express": "4.13.3",
-    "jquery": "2.1.1"
+    "jquery": "2.1.1",
+    "mongodb": "^2.2.10",
+    "request": "^2.75.0",
+    "request-promise": "^4.1.1"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/MojoMateo/HEIG.TWEB.Projet01"
-  },
-  "keywords": [
-    "node",
-    "heroku",
-    "express"
-  ],
-  "license": "MIT"
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0"
+  }
 }

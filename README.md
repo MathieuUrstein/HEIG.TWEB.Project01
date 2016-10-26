@@ -1,4 +1,8 @@
-# HEIG.TWEB.Projet01
+# HEIG.TWEB.Project01
 
 ## Landing page
-https://mojomateo.github.io/HEIG.TWEB.Projet01/
+https://mathieuurstein.github.io/HEIG.TWEB.Project01/
+
+## Sources
+#### Template
+https://startbootstrap.com/template-overviews/landing-page/

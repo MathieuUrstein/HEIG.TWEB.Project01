@@ -1,7 +1,7 @@
 {
   "name": "Project01",
   "description": "A web app for TWEB",
-  "repository": "https://github.com/MojoMateo/HEIG.TWEB.Projet01",
+  "repository": "https://github.com/mathieuurstein/HEIG.TWEB.Project01",
   "logo": "",
   "keywords": ["node", "express", "TWEB"],
   "image": ""
