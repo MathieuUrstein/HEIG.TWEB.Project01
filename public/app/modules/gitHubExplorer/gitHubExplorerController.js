@@ -82,9 +82,9 @@
             // retenter dans 2 seconde
             if (
                     Object.keys(ret).length === 0 ||
-                    ret[0].status === 202 ||
-                    ret[1].status === 202 ||
-                    ret[2].status === 202
+                    ret[0].status !== 200 ||
+                    ret[1].status !== 200 ||
+                    ret[2].status !== 200
             ) {
                 console.log('api is preparing results, waiting 2 sec');
                 setTimeout(function () {

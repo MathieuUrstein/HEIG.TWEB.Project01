@@ -8,6 +8,7 @@
 	function menu($scope) {
 		$scope.menus = {
             'GitHubExplorer' : 'gitHubExplorer',
+			'History' : 'history',
             'About' : 'about'
 		};
 	}

@@ -25,7 +25,8 @@ module.exports = function(grunt) {
                     'public/app/modules/gitHubExplorer/gitHubExplorerModule.js',
                     'public/app/modules/gitHubExplorer/gitHubExplorerRoute.js',
                     'public/app/modules/gitHubExplorer/gitHubExplorerController.js',
-                    'public/app/modules/about/aboutRoute.js'
+                    'public/app/modules/about/aboutRoute.js',
+                    'public/app/modules/history/historyRoute.js'
                 ],
                 dest: 'public/js/concat.js'
             }

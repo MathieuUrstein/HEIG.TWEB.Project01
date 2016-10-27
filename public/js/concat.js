@@ -485,6 +485,7 @@ a.max=null===a.max?n:Math.max(a.max,n)})}else e.each(l,function(i,n){var r=o.get
 	function menu($scope) {
 		$scope.menus = {
             'GitHubExplorer' : 'gitHubExplorer',
+			'History' : 'history',
             'About' : 'about'
 		};
 	}
@@ -595,9 +596,9 @@ angular.module('HEIG.TWEB.Project01')
             // retenter dans 2 seconde
             if (
                     Object.keys(ret).length === 0 ||
-                    ret[0].status === 202 ||
-                    ret[1].status === 202 ||
-                    ret[2].status === 202
+                    ret[0].status !== 200 ||
+                    ret[1].status !== 200 ||
+                    ret[2].status !== 200
             ) {
                 console.log('api is preparing results, waiting 2 sec');
                 setTimeout(function () {
@@ -713,6 +714,19 @@ angular.module('HEIG.TWEB.Project01')
 			    views: {
 			        'content@': {
                         templateUrl: 'app/modules/about/about.html'
+                    }
+                }
+			});
+	});
+
+angular.module('HEIG.TWEB.Project01')
+	.config(function ($stateProvider) {
+		$stateProvider
+			.state('root.history', {
+			    url: '/history',
+			    views: {
+			        'content@': {
+                        templateUrl: 'app/modules/history/history.html'
                     }
                 }
 			});
