@@ -1,25 +1,27 @@
 (function () {
     angular
-		.module('gitHubExplorer')
-		.controller('gitHubExplorerController', Home);
+        .module('gitHubExplorer')
+        .controller('gitHubExplorerController', Home);
 
-	function Home($q, $scope, $http) {
+    Home.$inject = ['$q', '$scope', '$http', 'gitHubExplorerService'];
+
+    function Home($q, $scope, $http, gitHubExplorerService) {
 
         $scope.contributors = [];
-		$scope.title = "GitHubExplorer";
+        $scope.title = "GitHubExplorer";
         $scope.subtitle = "Some statistics on github as graphics";
         $scope.user = 'angular';
         $scope.userRepo = 'angular.js';
-        $scope.fetchAPI = function(){fetchAPI($q, $scope, $http)};
+        $scope.fetchAPI = function(){fetchAPI($scope, gitHubExplorerService)};
         $scope.setAngularJs = function(){setAngularJs($scope)};
         $scope.setAngular2 = function(){setAngular2($scope)};
         $scope.setReact = function(){setReact($scope)};
         $scope.setEmber = function(){setEmber($scope)};
 
         fetchAPI($q, $scope, $http);
-	}
+    }
 
-	function setAngularJs($scope) {
+    function setAngularJs($scope) {
         $scope.user = 'angular';
         $scope.userRepo = 'angular.js';
         $scope.fetchAPI();
@@ -43,64 +45,12 @@
         $scope.fetchAPI();
     }
 
-    function fetchAPI($q, $scope, $http) {
+    function fetchAPI($scope, gitHubExplorerService) {
         // start loading
         $scope.loadingStyle = {
             'visibility': 'visible'
         };
-
-        var token = '4ff527905e6cea7a2dafe27f9f784695eea0d44b';
-        var url = 'https://api.github.com';
-        var repos = '/repos';
-        var owner = '/'+$scope.user;
-        var repo = '/'+$scope.userRepo;
-        var apiUrlCombined = url+repos+owner+repo;
-        var options = {
-            headers: {'Authorization': 'token '+token}
-        };
-
-        // get the contributors list
-        var promiseContributors = $http.get(apiUrlCombined + '/stats/contributors', options);
-
-        // get the last year commit activity
-        var promiseActivity = $http.get(apiUrlCombined + '/stats/commit_activity', options);
-
-        // get the punch_card
-        var promisePunch = $http.get(apiUrlCombined + '/stats/punch_card', options);
-
-        // execute tous les appels et attend toutes les réponses avant de passer au callback
-        // en cas de réponse avec status 202 l'objet retourné est vide
-        // il faut donc attendre un moment et relancer la requête
-        // https://developer.github.com/v3/repos/statistics/
-        $q.all([
-            promiseContributors,
-            promiseActivity,
-            promisePunch
-
-        ]).then(function (ret) {
-            // github n'a pas fini de formuler le résultat,
-            // retenter dans 2 seconde
-            if (
-                    Object.keys(ret).length === 0 ||
-                    ret[0].status !== 200 ||
-                    ret[1].status !== 200 ||
-                    ret[2].status !== 200
-            ) {
-                console.log('api is preparing results, waiting 2 sec');
-                setTimeout(function () {
-                    fetchAPI($q, $scope, $http);
-                }, 2000);
-                return;
-            }
-
-            $scope.contributors = ret[0].data;
-            $scope.commit_activity = ret[1].data;
-            $scope.punch_card = ret[2].data;
-            prepareForCharts($scope);
-
-        }).catch(function(e) {
-            console.log(e);
-        });
+        gitHubExplorerService.fetchAPI($scope, prepareForCharts);
     }
 
     function unixToDate(unixTimeStamp) {
@@ -109,8 +59,7 @@
         var year = a.getFullYear();
         var month = months[a.getMonth()];
         var date = a.getDate();
-        var time = date + ' ' + month + ' ' + year;
-        return time;
+        return date + ' ' + month + ' ' + year;
     }
 
     function prepareForCharts($scope) {

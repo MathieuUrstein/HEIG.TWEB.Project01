@@ -1,4 +1,4 @@
-angular.module('HEIG.TWEB.Project01')
+angular.module('gitHubExplorer')
 	.config(function ($stateProvider) {
 		$stateProvider
 			.state('root.gitHubExplorer', {

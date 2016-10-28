@@ -1,11 +1,12 @@
-angular.module('HEIG.TWEB.Project01')
+angular.module('history')
 	.config(function ($stateProvider) {
 		$stateProvider
 			.state('root.history', {
 			    url: '/history',
 			    views: {
 			        'content@': {
-                        templateUrl: 'app/modules/history/history.html'
+                        templateUrl: 'app/modules/history/history.html',
+						controller: 'historyController'
                     }
                 }
 			});

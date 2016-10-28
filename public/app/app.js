@@ -6,7 +6,8 @@
 		'ui.router',
 
         'menu',
-		'gitHubExplorer'
+		'gitHubExplorer',
+        'history'
 	])
     .config(function ($stateProvider, $urlRouterProvider) {
 

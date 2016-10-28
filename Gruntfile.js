@@ -20,13 +20,21 @@ module.exports = function(grunt) {
                     'node_modules/angular-chart.js/dist/angular-chart.min.js',
 
                     'public/app/app.js',
+
                     'public/app/modules/menu/menuModule.js',
                     'public/app/modules/menu/menuController.js',
+
                     'public/app/modules/gitHubExplorer/gitHubExplorerModule.js',
                     'public/app/modules/gitHubExplorer/gitHubExplorerRoute.js',
                     'public/app/modules/gitHubExplorer/gitHubExplorerController.js',
+                    'public/app/modules/gitHubExplorer/gitHubExplorerService.js',
+
                     'public/app/modules/about/aboutRoute.js',
-                    'public/app/modules/history/historyRoute.js'
+
+                    'public/app/modules/history/historyModule.js',
+                    'public/app/modules/history/historyRoute.js',
+                    'public/app/modules/history/historyController.js',
+                    'public/app/modules/history/historyService.js'
                 ],
                 dest: 'public/js/concat.js'
             }
