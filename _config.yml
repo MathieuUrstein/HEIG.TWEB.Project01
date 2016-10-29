@@ -13,13 +13,13 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: TWEB Projet 1
+title: TWEB Project 01
 email: mathieu.urstein@heig-vd.ch
 description: > # this means to ignore newlines until "baseurl:"
-  Premier projet de TWEB par Mathieu Urstein et Sébastien Boson
+  A web project by Sébastien Boson and Mathieu Urstein
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://localhost:8080" # the base hostname & protocol for your site
-github_username:  MojoMateo
+github_username:  MathieuUrstein
 
 # Build settings
 markdown: kramdown
