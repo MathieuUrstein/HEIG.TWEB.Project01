@@ -10,9 +10,9 @@ module.exports = function(grunt) {
             },
             js: {
                 src: [
+                    'node_modules/angular/angular.min.js',
                     'node_modules/jquery/dist/jquery.min.js',
                     'node_modules/bootstrap/dist/js/bootstrap.min.js',
-                    'node_modules/angular/angular.min.js',
                     'node_modules/angular-animate/angular-animate.min.js',
                     'node_modules/angular-resource/angular-resource.min.js',
                     'node_modules/angular-ui-router/release/angular-ui-router.min.js',

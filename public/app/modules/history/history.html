@@ -1,19 +1,101 @@
 <!-- Header -->
-<a name="about"></a>
 <div class="intro-header">
 	<div class="container">
-
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="intro-message">
 					<h1>History</h1>
-					<h3>coucou</h3>
+					<h3>Last 10 custom searches</h3>
+                    <div ng-style="loadingStyle" id="loading"><p>loading</p></div>
 				</div>
 			</div>
 		</div>
-
 	</div>
 	<!-- /.container -->
-
 </div>
 <!-- /.intro-header -->
+<!-- Page Content -->
+<div class="content-section-a">
+	<div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default" ng-repeat="entry in history">
+                        <div class="panel-heading" role="tab" id="heading{{entry._id}}">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-target="#collapse{{entry._id}}" data-parent="#accordion" aria-expanded="false" aria-controls="collapse{{entry._id}}">
+                                    {{entry.user}} / {{entry.userRepo}}
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapse{{entry._id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{entry._id}}">
+                            <div class="panel-body">
+                                <p>{{entry.date | date:'yyyy-MM-dd HH:mm:ss'}}</p>
+
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <hr class="section-heading-spacer">
+                                        <div class="clearfix"></div>
+                                        <h2 class="section-heading">Top contributors</h2>
+                                        <div class="row">
+                                            <p class="text-center">Number of commits per contributors</p>
+                                            <canvas class="chart chart-bar"
+                                                    chart-data="entry.charts.contributors.data"
+                                                    chart-labels="entry.charts.contributors.labels">
+                                            </canvas>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-2 contributorsProfile" ng-repeat="contributor in entry.contributors">
+                                                <a href="{{contributor.author.html_url}}">
+                                                    <p>{{contributor.author.login}} ({{contributor.total}})</p>
+                                                    <img ng-src="{{contributor.author.avatar_url}}">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <hr class="section-heading-spacer">
+                                        <div class="clearfix"></div>
+                                        <h2 class="section-heading">Activities</h2>
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <p class="text-center">Commits per weeks</p>
+                                                <canvas class="chart chart-bar"
+                                                        chart-data="entry.charts.commit_activity.data"
+                                                        chart-labels="entry.charts.commit_activity.labels">
+                                                </canvas>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top: 40px">
+                                            <div class="col-xs-6">
+                                                <p class="text-center">Activities per week</p>
+                                                <canvas class="chart chart-polar-area"
+                                                        chart-data="entry.charts.punch_card.days.data"
+                                                        chart-labels="entry.charts.punch_card.days.labels">
+                                                </canvas>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <p class="text-center">Activities per hours</p>
+                                                <canvas class="chart chart-polar-area"
+                                                        chart-data="entry.charts.punch_card.hours.data"
+                                                        chart-labels="entry.charts.punch_card.hours.labels">
+                                                </canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- /.container -->
+</div>
+<!-- /.content-section-a -->

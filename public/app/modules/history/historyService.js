@@ -9,7 +9,8 @@
 
         return {
             getHistory: function () {
-                console.log('historyService')
+                // promise of the backend last 10 history data
+                return $http.get('/api/gitHubExplorer/lasts');
             }
         }
     }

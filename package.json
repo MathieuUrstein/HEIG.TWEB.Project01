@@ -25,6 +25,7 @@
     "angular-chart.js": "1.0.3",
     "angular-resource": "1.5.8",
     "angular-ui-router": "0.3.1",
+    "body-parser": "^1.15.2",
     "bootstrap": "3.3.7",
     "express": "4.13.3",
     "jquery": "2.1.1",

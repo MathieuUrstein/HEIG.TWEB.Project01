@@ -1,29 +1,37 @@
+exports.saveOne = saveOne;
+exports.fetchLast10 = fetchLast10;
+
 var MongoClient = require('mongodb');
 var request = require('request-promise');
-var dbUrl = 'mongodb://localhost:27017/trying';
-var apiOptions = {
-    uri: 'http://api.tvmaze.com/shows',
-    json: true
-};
-var collectionName = 'testApiInMongo';
 
-fetchAndSave(dbUrl, apiOptions, collectionName);
-
-function fetchAndSave(dbUrl, apiOptions, collectionName) {
+// save one data object to mongo db
+function saveOne(dbUrl, collectionName, data) {
     var context = {
         DB_URL: dbUrl,
-        API_OPTIONS: apiOptions,
+        DATA: data,
         COLLECTION: collectionName
     };
-
+    // cascade of all needed promises
     return openDatabaseConnection(context)
-        .then(fetchApiData)
         .then(saveData)
         .then(closeDatabaseConnection);
+}
+// fetch last 10 saved documents
+function fetchLast10(dbUrl, collectionName) {
+    var context = {
+        DB_URL: dbUrl,
+        DATA: {},
+        COLLECTION: collectionName
+    };
+    // cascade of all needed promises
+    return openDatabaseConnection(context)
+    .then(getData)
+    .then(closeDatabaseConnection);
 }
 
 function openDatabaseConnection(context) {
 
+    console.log('================================================');
     console.log('opening database connection');
 
     return  MongoClient.connect(context.DB_URL)
@@ -33,39 +41,35 @@ function openDatabaseConnection(context) {
 
                 console.log('DB connected');
                 //console.log(db);
-
                 context.DB = db;
-
                 return context;
+
             } else {
 
-
+                console.log('Could not connect to database')
             }
         });
 }
 
-function fetchApiData(context) {
+function getData(context) {
 
-    console.log('Fetching Data from API url');
+    console.log('Getting data from database');
 
-    return request(context.API_OPTIONS)
-        .then(function(data, error) {
+    var collection = context.DB.collection(context.COLLECTION);
 
-            if (!error) {
+    return collection.find().sort({date: -1}).limit(10).toArray().then(function (results, error) {
 
-                console.log('Data fetched');
-                //console.log(data);
+        if (!error) {
+            console.log('Data retrieved');
+            context.DATA = results;
+            return context;
+        } else {
 
-                context.DATA = data;
-
-                return context;
-            } else {
-
-                console.log('Could not get data from API');
-                console.log(error);
-                closeDatabaseConnection();
-            }
-        });
+            console.log('Could not retrieve data from database');
+            console.log(error);
+            closeDatabaseConnection();
+        }
+    });
 }
 
 function saveData(context) {
@@ -74,7 +78,7 @@ function saveData(context) {
 
     var collection = context.DB.collection(context.COLLECTION);
 
-    return collection.insertMany(context.DATA)
+    return collection.insertOne(context.DATA)
         .then(function (results, error) {
 
             if (!error) {

@@ -7,62 +7,71 @@
 
     function GitHubExplorerService($http, $q) {
 
-        service = {
+        var service = {};
 
-            fetchAPI: function ($scope, action) {
-                var token = '4ff527905e6cea7a2dafe27f9f784695eea0d44b';
-                var url = 'https://api.github.com';
-                var repos = '/repos';
-                var owner = '/'+$scope.user;
-                var repo = '/'+$scope.userRepo;
-                var apiUrlCombined = url+repos+owner+repo;
-                var options = {
-                    headers: {'Authorization': 'token '+token}
-                };
+        // fetches the github API based on the given scope parameters
+        // if an action is specified, after data are fetched, this action is triggered
+        service.fetchAPI = function ($scope, action) {
+            var token = '4ff527905e6cea7a2dafe27f9f784695eea0d44b';
+            var url = 'https://api.github.com';
+            var repos = '/repos';
+            var owner = '/'+$scope.user;
+            var repo = '/'+$scope.userRepo;
+            var apiUrlCombined = url+repos+owner+repo;
+            var options = {
+                headers: {'Authorization': 'token '+token}
+            };
 
-                // get the contributors list
-                var promiseContributors = $http.get(apiUrlCombined + '/stats/contributors', options);
+            // get the contributors list
+            var promiseContributors = $http.get(apiUrlCombined + '/stats/contributors', options);
 
-                // get the last year commit activity
-                var promiseActivity = $http.get(apiUrlCombined + '/stats/commit_activity', options);
+            // get the last year commit activity
+            var promiseActivity = $http.get(apiUrlCombined + '/stats/commit_activity', options);
 
-                // get the punch_card
-                var promisePunch = $http.get(apiUrlCombined + '/stats/punch_card', options);
+            // get the punch_card
+            var promisePunch = $http.get(apiUrlCombined + '/stats/punch_card', options);
 
-                // execute tous les appels et attend toutes les réponses avant de passer au callback
-                // en cas de réponse avec status 202 l'objet retourné est vide
-                // il faut donc attendre un moment et relancer la requête
-                // https://developer.github.com/v3/repos/statistics/
-                $q.all([
-                    promiseContributors,
-                    promiseActivity,
-                    promisePunch
+            // execute all the promises and wait for them all to be resoved
+            // in case of 202 response, github is generating an answer
+            // but you have to wait for this answer to be ready
+            // https://developer.github.com/v3/repos/statistics/
+            $q.all([
+                promiseContributors,
+                promiseActivity,
+                promisePunch
 
-                ]).then(function (ret) {
-                    // github n'a pas fini de formuler le résultat,
-                    // retenter dans 2 seconde
-                    if (
-                        Object.keys(ret).length === 0 ||
-                        ret[0].status !== 200 ||
-                        ret[1].status !== 200 ||
-                        ret[2].status !== 200
-                    ) {
-                        console.log('api is preparing results, waiting 2 sec');
-                        setTimeout(function () {
-                            service.fetchAPI($scope, action);
-                        }, 2000);
-                        return;
-                    }
+            ]).then(function (ret) {
+                // if github have not resolved the statistics
+                // then wait 2 seconds
+                // and restart the request
+                if (
+                    Object.keys(ret).length === 0 ||
+                    ret[0].status !== 200 ||
+                    ret[1].status !== 200 ||
+                    ret[2].status !== 200
+                ) {
+                    console.log('api is preparing results, waiting 2 sec');
+                    setTimeout(function () {
+                        service.fetchAPI($scope, action);
+                    }, 2000);
+                    return;
+                }
+                // define data to the scope
+                $scope.contributors = ret[0].data;
+                $scope.commit_activity = ret[1].data;
+                $scope.punch_card = ret[2].data;
+                action($scope);
+            }).catch(function(e) {
+                console.log(e);
+            });
+        };
 
-                    $scope.contributors = ret[0].data;
-                    $scope.commit_activity = ret[1].data;
-                    $scope.punch_card = ret[2].data;
-                    action($scope);
-
-                }).catch(function(e) {
-                    console.log(e);
-                });
-            }
+        // save data to backend
+        // to do that just use http post method with the data
+        // the server will take care of the rest
+        service.saveDataToDb = function (data) {
+            $http.post('/api/gitHubExplorer/new', data);
+            console.log('data sent to server');
         };
 
         return service;
