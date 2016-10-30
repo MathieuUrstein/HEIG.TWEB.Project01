@@ -18,6 +18,11 @@ The idea in this project is to learn web technologies by using :
 - Grunt
 - Jquery
 - Express
+- Bootstrap
+- Node
+- Heroku
+- ui-router
+- npm
 
 And the following languages :
 

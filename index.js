@@ -10,7 +10,7 @@ var dbUrlHeroku = 'mongodb://HEIG.TWEB.Project01:Project01.TWEB.HEIG@ds139267.ml
 var dbUrl = dbUrlHeroku;
 var collectionName = 'history';
 
-app.set('port', appPort);
+app.set('port', (process.env.PORT || appPort));
 
 // payload limit
 // for parsing application/json
