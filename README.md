@@ -113,6 +113,9 @@ Then start the server with :
 the app will be accssible at the following url :
 http://localhost:5000/
 
+## Configuration
+The configuration variables can be found in the /index.js file.
+
 
 ## Sources
 - Template :

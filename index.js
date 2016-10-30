@@ -4,7 +4,10 @@ var mongo = require('./mongo');
 var app = express();
 
 var appPort = 8080;
-var dbUrl = 'mongodb://localhost:27017/gitHubExplorer';
+var dbUrlLocal = 'mongodb://localhost:27017/gitHubExplorer';
+var dbUrlHeroku = 'mongodb://HEIG.TWEB.Project01:Project01.TWEB.HEIG@ds139267.mlab.com:39267/heroku_8j1h8qwk';
+
+var dbUrl = dbUrlHeroku;
 var collectionName = 'history';
 
 app.set('port', appPort);
