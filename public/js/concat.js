@@ -477,13 +477,14 @@ a.max=null===a.max?n:Math.max(a.max,n)})}else e.each(l,function(i,n){var r=o.get
 })();
 
 (function () {
-
 	angular
 		.module('menu')
 		.controller('menuController', menu);
 
 
 	function menu($scope) {
+		// header menus
+		// DisplayName : module
 		$scope.menus = {
             'GitHubExplorer' : 'gitHubExplorer',
 			'History' : 'history',
@@ -520,40 +521,53 @@ angular.module('gitHubExplorer')
     Home.$inject = ['$scope', 'gitHubExplorerService'];
 
     function Home($scope, gitHubExplorerService) {
-        $scope.contributors = [];
+        // GitHubExplorer page title and subtitle
         $scope.title = "GitHubExplorer";
         $scope.subtitle = "Some statistics on github as graphics";
+
+        // Default repo to show
         $scope.user = 'angular';
         $scope.userRepo = 'angular.js';
+
+        // let the methods be available from the frontend
         $scope.fetchAPI = function(isCustom){methods.fetchAPI(isCustom)};
         $scope.setAngularJs = function(){methods.setAngularJs()};
         $scope.setAngular2 = function(){methods.setAngular2()};
         $scope.setReact = function(){methods.setReact()};
         $scope.setEmber = function(){methods.setEmber()};
+
+        // if it's a custom request, then we will save it in the database
         $scope.isCustom = false;
 
+        // let the controller have his methods like a class.
+        // this way we don't need to pass $scope to every methods
         var methods = {};
 
+        // set repo to angularjs
         methods.setAngularJs = function() {
             $scope.user = 'angular';
             $scope.userRepo = 'angular.js';
             $scope.fetchAPI();
         };
+        // set repo to angular2
         methods.setAngular2 = function() {
             $scope.user = 'angular';
             $scope.userRepo = 'angular';
             $scope.fetchAPI();
         };
+        // set repo to react
         methods.setReact = function() {
             $scope.user = 'facebook';
             $scope.userRepo = 'react';
             $scope.fetchAPI();
         };
+        // set repo to ember
         methods.setEmber = function() {
             $scope.user = 'emberjs';
             $scope.userRepo = 'ember.js';
             $scope.fetchAPI();
         };
+        // fetch the github api and then display it with charts
         methods.fetchAPI = function(isCustom) {
             // start loading
             $scope.loadingStyle = {
@@ -562,8 +576,11 @@ angular.module('gitHubExplorer')
             if (isCustom) {
                 $scope.isCustom = isCustom;
             }
+            // let's fetch it, and with the second argument, call the following action
+            // which is to display data as charts
             gitHubExplorerService.fetchAPI($scope, methods.prepareForCharts);
         };
+        // unix date to readable date
         methods.unixToDate = function(unixTimeStamp) {
             var a = new Date(unixTimeStamp * 1000);
             var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -572,8 +589,11 @@ angular.module('gitHubExplorer')
             var date = a.getDate();
             return date + ' ' + month + ' ' + year;
         };
+        // process data to match chart.js then display them on the frontend
         methods.prepareForCharts = function($scope) {
+            // most commits to less commits
             $scope.contributors.reverse();
+            // prepare the charts object
             $scope.charts = {
                 contributors : {
                     data : [],
@@ -600,17 +620,17 @@ angular.module('gitHubExplorer')
                     }
                 }
             };
-
+            // from api contributors to chart.js contributors
             for (key in $scope.contributors) {
                 $scope.charts.contributors.data.push($scope.contributors[key].total);
                 $scope.charts.contributors.labels.push($scope.contributors[key].author.login)
             }
-
+            // from api commits activities to chart.js commits activities
             for (key in $scope.commit_activity) {
                 $scope.charts.commit_activity.data.push($scope.commit_activity[key].total);
                 $scope.charts.commit_activity.labels.push(methods.unixToDate($scope.commit_activity[key].week));
             }
-
+            // from api punch card to chart.js punch card
             for (key in $scope.punch_card) {
                 $scope.charts.punch_card.days.data[$scope.punch_card[key][0]] += $scope.punch_card[key][2];
                 $scope.charts.punch_card.hours.data[$scope.punch_card[key][1]] += $scope.punch_card[key][2];
@@ -623,6 +643,7 @@ angular.module('gitHubExplorer')
 
             // save if custom search
             if ($scope.isCustom) {
+                // data to be saved
                 var sentData = {
                     contributors: $scope.contributors,
                     charts: $scope.charts,
@@ -630,10 +651,12 @@ angular.module('gitHubExplorer')
                     userRepo: $scope.userRepo
                 };
                 gitHubExplorerService.saveDataToDb(sentData);
+                // reset isCustom
                 $scope.isCustom = false;
             }
         };
 
+        // default repo fetched
         methods.fetchAPI();
     }
 })();
@@ -648,8 +671,10 @@ angular.module('gitHubExplorer')
 
         var service = {};
 
+        // fetches the github API based on the given scope parameters
+        // if an action is specified, after data are fetched, this action is triggered
         service.fetchAPI = function ($scope, action) {
-            var token = '4ff527905e6cea7a2dafe27f9f784695eea0d44b';
+            var token = '5e7d6783aeeaa2a09c29586e22fb662a3213cf82';
             var url = 'https://api.github.com';
             var repos = '/repos';
             var owner = '/'+$scope.user;
@@ -668,9 +693,9 @@ angular.module('gitHubExplorer')
             // get the punch_card
             var promisePunch = $http.get(apiUrlCombined + '/stats/punch_card', options);
 
-            // execute tous les appels et attend toutes les réponses avant de passer au callback
-            // en cas de réponse avec status 202 l'objet retourné est vide
-            // il faut donc attendre un moment et relancer la requête
+            // execute all the promises and wait for them all to be resoved
+            // in case of 202 response, github is generating an answer
+            // but you have to wait for this answer to be ready
             // https://developer.github.com/v3/repos/statistics/
             $q.all([
                 promiseContributors,
@@ -678,8 +703,9 @@ angular.module('gitHubExplorer')
                 promisePunch
 
             ]).then(function (ret) {
-                // github n'a pas fini de formuler le résultat,
-                // retenter dans 2 seconde
+                // if github have not resolved the statistics
+                // then wait 2 seconds
+                // and restart the request
                 if (
                     Object.keys(ret).length === 0 ||
                     ret[0].status !== 200 ||
@@ -692,7 +718,7 @@ angular.module('gitHubExplorer')
                     }, 2000);
                     return;
                 }
-
+                // define data to the scope
                 $scope.contributors = ret[0].data;
                 $scope.commit_activity = ret[1].data;
                 $scope.punch_card = ret[2].data;
@@ -702,6 +728,9 @@ angular.module('gitHubExplorer')
             });
         };
 
+        // save data to backend
+        // to do that just use http post method with the data
+        // the server will take care of the rest
         service.saveDataToDb = function (data) {
             $http.post('/api/gitHubExplorer/new', data);
             console.log('data sent to server');
@@ -710,7 +739,6 @@ angular.module('gitHubExplorer')
         return service;
     }
 })();
-
 
 angular.module('HEIG.TWEB.Project01')
 	.config(function ($stateProvider) {
@@ -753,10 +781,11 @@ angular.module('history')
     History.$inject = ['$scope', 'historyService'];
 
     function History($scope, historyService) {
-        historyService.getHistory().then(function (res) {
-            console.log(res.data);
-            $scope.history = res.data;
 
+        // get the history
+        historyService.getHistory().then(function (res) {
+            // store it
+            $scope.history = res.data;
             // end loading
             $scope.loadingStyle = {
                 'visibility': 'hidden'
@@ -775,6 +804,7 @@ angular.module('history')
 
         return {
             getHistory: function () {
+                // promise of the backend last 10 history data
                 return $http.get('/api/gitHubExplorer/lasts');
             }
         }

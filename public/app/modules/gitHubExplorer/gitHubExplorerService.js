@@ -12,7 +12,7 @@
         // fetches the github API based on the given scope parameters
         // if an action is specified, after data are fetched, this action is triggered
         service.fetchAPI = function ($scope, action) {
-            var token = '4ff527905e6cea7a2dafe27f9f784695eea0d44b';
+            var token = '5e7d6783aeeaa2a09c29586e22fb662a3213cf82';
             var url = 'https://api.github.com';
             var repos = '/repos';
             var owner = '/'+$scope.user;
@@ -77,4 +77,3 @@
         return service;
     }
 })();
-
